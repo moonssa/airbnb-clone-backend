@@ -23,6 +23,9 @@ class RoomAdmin(admin.ModelAdmin):
         "amenities",
     )
 
+    # def total_amenities(self, room):
+    #     return room.amenities.count()
+
 
 @admin.register(Amenity)
 class AmenityAdmin(admin.ModelAdmin):
