@@ -20,13 +20,17 @@ class Experience(CommonModel):
     host = models.ForeignKey(
         "users.User",
         on_delete=models.CASCADE,
+        related_name="experiences",
     )
     price = models.PositiveIntegerField()
     address = models.CharField(max_length=500)
     start = models.TimeField()
     end = models.TimeField()
     description = models.TextField()
-    perks = models.ManyToManyField("experience.Perk")
+    perks = models.ManyToManyField(
+        "experience.Perk",
+        related_name="experiences",
+    )
 
     # category가 삭제되더라고 experience는 남긴다.
     category = models.ForeignKey(
@@ -34,6 +38,7 @@ class Experience(CommonModel):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
+        related_name="experiences",
     )
 
     def __str__(self) -> str:
