@@ -37,6 +37,9 @@ class Room(CommonModel):
     def __str__(self) -> str:
         return self.name
 
+    def total_amenities(self):
+        return self.amenities.count()
+
 
 class Amenity(CommonModel):
     name = models.CharField(max_length=150)

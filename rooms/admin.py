@@ -11,7 +11,7 @@ class RoomAdmin(admin.ModelAdmin):
         "kind",
         "owner",
         "created_at",
-        "updated_at",
+        "total_amenities",
     )
 
     list_filter = (
@@ -21,7 +21,6 @@ class RoomAdmin(admin.ModelAdmin):
         "pet_friendly",
         "kind",
         "amenities",
-        "updated_at",
     )
 
 
