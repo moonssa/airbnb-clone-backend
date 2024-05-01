@@ -2,6 +2,7 @@
 # from django.urls import path
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.exceptions import NotFound
 from .models import Category
 from .serializers import CategorySerializer
 
@@ -16,12 +17,35 @@ def categories(request):
             serializer.data,
         )
     elif request.method == "POST":
-        print(request.data)
-        return Response({"created": True})
+        # json 형태로 입력받은  data => QuerySet 형태로 변환
+        serializer = CategorySerializer(data=request.data)
+        if serializer.is_valid():
+            new_category = serializer.save()
+            return Response(
+                # QuerySet=>JSON 변환
+                CategorySerializer(new_category).data,
+            )
+        else:
+            return Response(serializer.errors)
 
 
-@api_view()
+@api_view(["GET", "PUT"])
 def category(request, pk):
-    category = Category.objects.get(pk=pk)
-    serializer = CategorySerializer(category)
-    return Response(serializer.data)
+    try:
+        category = Category.objects.get(pk=pk)
+    except Category.DoesNotExist:
+        raise NotFound
+    if request.method == "GET":
+        serializer = CategorySerializer(category)
+        return Response(serializer.data)
+    elif request.method == "PUT":
+        serializer = CategorySerializer(
+            category,
+            data=request.data,
+            partial=True,
+        )
+        if serializer.is_valid():
+            updated_category = serializer.save()
+            return Response(CategorySerializer(updated_category).data)
+        else:
+            return Response(serializer.errors)
