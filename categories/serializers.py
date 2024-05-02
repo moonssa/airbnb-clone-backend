@@ -4,7 +4,15 @@ from .models import Category
 # category model 을 json 형태로  어떻게 나타낼지 기술한다.
 
 
-class CategorySerializer(serializers.Serializer):
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        # fields = "__all__"
+        # fields = ("name", "kind")  # 보여주고 싶은 필드만
+        exclude = ("created_at",)  # 보여주지 않을 필드만
+
+
+""" class CategorySerializer(serializers.Serializer):
     # 카테고리 필드중에 노출한 필드를 지정해준다.
     pk = serializers.IntegerField(read_only=True)
     name = serializers.CharField(
@@ -23,4 +31,4 @@ class CategorySerializer(serializers.Serializer):
         instance.name = validated_data.get("name", instance.name)
         instance.kind = validated_data.get("kind", instance.kind)
         instance.save()
-        return instance
+        return instance """
